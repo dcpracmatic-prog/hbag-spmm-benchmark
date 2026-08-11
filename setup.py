@@ -14,7 +14,7 @@ class CustomBuildPy(build_py):
         so_path = os.path.join(target_dir, 'libhbag.so')
 
         os.makedirs(target_dir, exist_ok=True)
-        cmd = f"gcc -O3 -march=native -Wall -fPIC -shared {src_c} -o {so_path} -lm"
+        cmd = f"gcc -O3 -march=native -Wall -fPIC -shared {spmm_c} -o {so_path} -lm"
         
         print(f"Compilando kernel C para HBAG: {cmd}")
         subprocess.run(cmd, shell=True, check=True)
