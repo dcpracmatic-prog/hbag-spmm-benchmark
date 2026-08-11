@@ -1,22 +1,16 @@
-## `Makefile`
-
-```makefile
 CC ?= gcc
-CFLAGS ?= -O3 -march=native -Wall
+CFLAGS ?= -O3 -march=native -Wall -fPIC
 LDFLAGS ?= -lm
 
-.PHONY: all bench cache_probe run clean
+.PHONY: all clean
 
-all: bench cache_probe
+all: libhbag.so bench
+
+libhbag.so: src/spmm.c src/spmm.h
+	$(CC) $(CFLAGS) -shared src/spmm.c -o libhbag.so $(LDFLAGS)
 
 bench: src/bench.c src/spmm.c src/spmm.h
 	$(CC) $(CFLAGS) src/bench.c src/spmm.c -o bench $(LDFLAGS)
 
-cache_probe: tools/cache_probe.c src/spmm.c src/spmm.h
-	$(CC) $(CFLAGS) tools/cache_probe.c src/spmm.c -o cache_probe $(LDFLAGS)
-
-run: bench
-	./bench
-
 clean:
-	rm -f bench cache_probe *.o out.csr out.hbag
+	rm -f bench libhbag.so *.o out.csr out.hbag
