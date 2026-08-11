@@ -6,7 +6,10 @@ _dir = os.path.dirname(os.path.abspath(__file__))
 _lib_path = os.path.join(_dir, "libhbag.so")
 
 if not os.path.exists(_lib_path):
-    raise FileNotFoundError(f"No se encontró 'libhbag.so' en {_lib_path}")
+    raise RuntimeError(
+        f"El binario optimizado 'libhbag.so' no se encuentra en {_lib_path}. "
+        "Asegúrate de que la instalación con pip se completó correctamente."
+    )
 
 _lib = ctypes.CDLL(_lib_path)
 
