@@ -28,11 +28,7 @@ corrida del benchmark, no se asume.
 Requiere GCC disponible en el sistema (se compila al instalar).
 
 ```
-bash
-
-
 pip install git+https://github.com/dcpracmatic-prog/hbag-spmm-benchmark.git
-
 
 ```
 
