@@ -58,8 +58,8 @@ Para ejecutar directamente en entornos de cuaderno (como Google Colab) mantenien
 
 
 ```
-!git clone https://github.com/dcpracmatic-prog/hbag-spmm-benchmark.git
-!cd hbag-spmm-benchmark && gcc -O3 -march=native src/bench.c src/spmm.c -o bench -lm && ./bench
+git clone https://github.com/dcpracmatic-prog/hbag-spmm-benchmark.git
+cd hbag-spmm-benchmark && gcc -O3 -march=native src/bench.c src/spmm.c -o bench -lm && ./bench
 ```
 
 Verificar el mecanismo de caché (reproducible)
