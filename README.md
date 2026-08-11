@@ -1,5 +1,4 @@
-
-# HBAG-Core SpMM: Multiplicación Dispersa×Densa con Reordenamiento Cache-Aware
+# HBAG-Core SpMM: 'Multiplicación Dispersa×Densa con Reordenamiento Cache-Aware`
 
 Kernel en C de multiplicación matriz dispersa (CSR) × matriz densa, con una
 variante que reordena el recorrido de bucles para maximizar el reuso de
@@ -28,9 +27,13 @@ corrida del benchmark, no se asume.
 
 Requiere GCC disponible en el sistema (se compila al instalar).
 
-bash
 ```
+bash
+
+
 pip install git+https://github.com/dcpracmatic-prog/hbag-spmm-benchmark.git
+
+
 ```
 
 ```python
