@@ -44,9 +44,8 @@ Requiere GCC/Clang con soporte AVX2 (opcional — el kernel funciona sin
 vectorización explícita; el compilador auto-vectoriza según `-march`).
 
 `bash`
-
 ```
-make run
+git clone https://github.com/dcpracmatic-prog/hbag-spmm-benchmark.git
 ```
 O manualmente:
 
@@ -55,6 +54,7 @@ O manualmente:
 gcc -O3 -march=native src/bench.c src/spmm.c -o bench -lm
 ./bench
 ```
+
 ## Verificar el mecanismo de caché (reproducible)
 
 make cache_probe
