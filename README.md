@@ -40,61 +40,55 @@ cifra de portada.
 
 ## Compilar y correr
 
-`bash`
 Requiere GCC/Clang con soporte AVX2 (opcional — el kernel funciona sin
 vectorización explícita; el compilador auto-vectoriza según `-march`).
 
-
-make run
-
-O manualmente:
 `bash`
+
+```
+make run
+```
+O manualmente:
+
+`bash`
+```
 gcc -O3 -march=native src/bench.c src/spmm.c -o bench -lm
 ./bench
-
+```
 ## Verificar el mecanismo de caché (reproducible)
 
 make cache_probe
 
+```
 valgrind --tool=cachegrind --cachegrind-out-file=out.csr ./cache_probe csr
 valgrind --tool=cachegrind --cachegrind-out-file=out.hbag ./cache_probe hbag
 cg_annotate out.csr | head -25
 cg_annotate out.hbag | head -25
-
+```
 Busca las líneas D1 misses y D1 miss rate en cada salida — ahí está la
 evidencia del mecanismo, no en el tiempo de reloj.
 
 
 ## Estructura:
+```markdown
 
+├── src/spmm.h              | Interfaz de las dos implementaciones |
+├── src/spmm.c              | Kernel: CSR estandar y HBAG-Core |
+├── src/bench.c             | Harness de benchmark: barrido multi-config + verificacion |
+├── tools/cache_probe.c     | Euncion aislada, para profiling de cache |
+├── Makefile
+├── LICENSE                 | MIT, cubre todo el repo sin excepcion |
+└── BENCHMARKS.md           | Metodologia, tabla de resultados, evidencia de mecanismo |
 
-├── *src/spmm.h*            | `Interfaz de las dos implementaciones` |
-
-
-├── *src/spmm.c*            | `Kernel: CSR estandar y HBAG-Core` |
-
-
-├── *src/bench.c*           | `Harness de benchmark: barrido multi-config + verificacion` |
-
-
-├── *tools/cache_probe.c*     | `Euncion aislada, para profiling de cache` |
-
-
-├── *Makefile*
-
-
-├── *LICENSE*                | `MIT, cubre todo el repo sin excepcion` |
-
-
-└── *BENCHMARKS.md*           | `Metodologia, tabla de resultados, evidencia de mecanismo` |
-
-
+```
 
 ## Limitaciones conocidas
 
 El kernel HBAG-Core no divide en bloques (tiling) para K muy grande; para K que exceda el tamaño de L1 disponible, el reuso de línea se degrada. No probado más allá de K=512.
 
+
 Un solo hilo. No hay paralelización con OpenMP ni comparación contra librerías multi-hilo (MKL, OpenBLAS) — queda pendiente como trabajo futuro, no como reclamo actual.
+
 
 La generación de matriz dispersa usa un patrón de densidad no-uniforme simple (por bloques de filas), no un dataset real. Ver BENCHMARKS.md para el detalle de qué tan representativo es esto.
 
