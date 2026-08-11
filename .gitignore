@@ -3,3 +3,10 @@ cache_probe
 *.o
 out.csr
 out.hbag
+hbag/libhbag.so
+hbag/__pycache__/
+*.egg-info/
+build/
+dist/
+__pycache__/
+*.pyc
