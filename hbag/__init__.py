@@ -5,15 +5,15 @@ import subprocess
 
 _dir = os.path.dirname(os.path.abspath(__file__))
 _lib_path = os.path.join(_dir, "libhbag.so")
-_src_c = os.path.join(_dir, "src", "spmm.c")
 
-# Autocompilación automática si no existe libhbag.so
+# Fallback: Si se importa sin haber instalado via pip, intenta autocompilar localmente
 if not os.path.exists(_lib_path):
+    _src_c = os.path.abspath(os.path.join(_dir, "..", "src", "spmm.c"))
     if os.path.exists(_src_c):
         cmd = f"gcc -O3 -march=native -Wall -fPIC -shared {_src_c} -o {_lib_path} -lm"
         subprocess.run(cmd, shell=True, check=True)
     else:
-        raise FileNotFoundError(f"No se encontró el código fuente en {_src_c} para compilar libhbag.so")
+        raise FileNotFoundError(f"No se encontró el binario compilado ni el fuente C en {_src_c}")
 
 _lib = ctypes.CDLL(_lib_path)
 
@@ -36,8 +36,8 @@ _lib.spmm_hbag_core.restype = None
 
 def spmm_hbag(A_sparse, B: np.ndarray) -> np.ndarray:
     """
-    Multiplica una matriz dispersa (SciPy csr_matrix o tupla de arrays CSR) 
-    por una matriz densa B usando el motor HBAG-Core.
+    Multiplica una matriz dispersa (SciPy csr_matrix o tupla CSR) 
+    por una matriz densa B utilizando el motor acelerado HBAG-Core.
     """
     if hasattr(A_sparse, 'indptr'):
         row_ptr = A_sparse.indptr
@@ -71,4 +71,3 @@ def spmm_hbag(A_sparse, B: np.ndarray) -> np.ndarray:
         K
     )
     return C
-
