@@ -1,0 +1,37 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel numpy scipy pytest
+          # torch CPU-only: necesario solo para la prueba de paridad
+          # HBAG vs PyTorch/MKL a escala reducida (ver BENCHMARKS.md para
+          # la version a gran escala, verificada por separado en Kaggle,
+          # no reproducible en CI por limites de RAM/tiempo del runner).
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Instalar el paquete hbag (compila el kernel C)
+        run: pip install -e . --no-build-isolation
+
+      - name: Correr pruebas de correccion
+        run: pytest tests/ -v
+
+      - name: Verificar que el benchmark C compila limpio
+        run: make bench
