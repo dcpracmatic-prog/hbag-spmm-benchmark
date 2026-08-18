@@ -1,5 +1,7 @@
 # HBAG-SpMM-Adaptive v0.3.0
 
+[![tests](https://github.com/dcpracmatic-prog/hbag-spmm-benchmark/actions/workflows/test.yml/badge.svg)](https://github.com/dcpracmatic-prog/hbag-spmm-benchmark/actions/workflows/test.yml)
+
 SpMM (Sparse x Dense) CSR con schedule OpenMP **adaptativo** gobernado
 por homeostasis SOL-ART. Mismo calculo matematico que scipy, con un
 schedule que reacciona a la irregularidad de densidad por fila y al
