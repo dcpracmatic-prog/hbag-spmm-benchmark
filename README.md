@@ -2,10 +2,8 @@
 
 [![tests](https://github.com/dcpracmatic-prog/hbag-spmm-benchmark/actions/workflows/test.yml/badge.svg)](https://github.com/dcpracmatic-prog/hbag-spmm-benchmark/actions/workflows/test.yml)
 
-SpMM (Sparse x Dense) CSR con schedule OpenMP **adaptativo** gobernado
-por homeostasis SOL-ART. Mismo calculo matematico que scipy, con un
-schedule que reacciona a la irregularidad de densidad por fila y al
-TERM_U del bloque anterior. Bit-exact paralelo al kernel clasico.
+SpMM (Sparse x Dense) CSR con schedule OpenMP **adaptativo** . con un
+schedule que reacciona a la irregularidad de densidad por fila. Bit-exact paralelo al kernel clasico.
 
 > Que trae v0.3.0:
 > - `spmm_hbag_core_omp64_adaptive`: 4 modos (`0` dynamic, `2` static, `3` balanced, otros = guided).
