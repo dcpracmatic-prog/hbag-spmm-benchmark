@@ -22,6 +22,8 @@ from typing import Any, Dict, Optional, Tuple, Union
 
 import numpy as np
 
+__version__ = "0.3.0"
+
 _dir = os.path.dirname(os.path.abspath(__file__))
 _lib_path = os.path.join(_dir, "libhbag.so")
 
