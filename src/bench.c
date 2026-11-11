@@ -181,6 +181,12 @@ static void emit_text_row(int k, const W *w, int nth, double t_ms,
 static int run_sweep(int trials, int threads, int self_test_only,
                      int csv_mode, const char *csv_path, int csv_stdout) {
     int had_fail = 0;
+    FILE *csv_out = NULL;
+    if (csv_mode && !csv_stdout) {
+        csv_out = fopen(csv_path ? csv_path : "/tmp/bench_results.csv", "w");
+        if (!csv_out) { perror("csv"); return 1; }
+        fprintf(csv_out, "config,label,N,K,density,nnz,threads,kernel,t_ms,max_err,status\n");
+    }
     if (!csv_mode && !self_test_only) {
         printf("hbag-spmm-adaptive v0.3.0 -- %d hilos%s\n",
                threads > 0 ? threads : omp_get_max_threads(),
@@ -198,15 +204,10 @@ static int run_sweep(int trials, int threads, int self_test_only,
         int adapt_eq = evaluate(&w, ts, err, ok);
 
         if (csv_mode) {
-            FILE *out = csv_stdout ? stdout
-                          : fopen(csv_path ? csv_path : "/tmp/bench_results.csv", "w");
-            if (!out) { perror("csv"); free_W(&w); return 1; }
-            if (!csv_stdout) {
-                fprintf(out, "config,label,N,K,density,nnz,threads,kernel,t_ms,max_err,status\n");
-            }
+            FILE *out = csv_stdout ? stdout : csv_out;
             for (int k = 1; k < 7; k++)
                 emit_csv_row(out, c, k, &w, nth, ts[k] * 1e3, err[k], ok[k]);
-            if (!csv_stdout) fclose(out);
+            if (csv_stdout) fflush(out);
         }
         if (self_test_only) {
             int all_ok = 1;
@@ -227,6 +228,7 @@ static int run_sweep(int trials, int threads, int self_test_only,
         for (int k = 0; k < 7; k++) if (!ok[k]) had_fail = 1;
         free_W(&w);
     }
+    if (csv_out) fclose(csv_out);
     return had_fail ? 2 : 0;
 }
 
